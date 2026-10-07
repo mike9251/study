@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="460" viewBox="0 0 720 460" font-family="sans-serif">
+  <defs>
+    <marker id="axisArrow" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#222"/>
+    </marker>
+    <marker id="accentArrow" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" refX="9" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 Z" fill="#c2410c"/>
+    </marker>
+  </defs>
+  <rect width="720" height="460" fill="#fafafa"/>
+
+  <text x="360" y="26" text-anchor="middle" font-size="18" fill="#222">Roofline: the decode matmul slides right as B grows</text>
+
+  <!-- axes -->
+  <line x1="90" y1="390" x2="670" y2="390" stroke="#222" stroke-width="2" marker-end="url(#axisArrow)"/>
+  <line x1="90" y1="390" x2="90" y2="50" stroke="#222" stroke-width="2" marker-end="url(#axisArrow)"/>
+  <text x="380" y="428" text-anchor="middle" font-size="14" fill="#222">arithmetic intensity&#160;&#160;I = FLOPs per HBM byte&#160;&#160;&#160;(decode matmul: I = 2B/s)</text>
+  <text x="45" y="220" text-anchor="middle" font-size="14" fill="#222" transform="rotate(-90 45 220)">attainable FLOP/s = min(C, β·I)</text>
+
+  <!-- guides: ridge point C/β and ceiling C -->
+  <line x1="360" y1="390" x2="360" y2="150" stroke="#777" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <line x1="90" y1="150" x2="360" y2="150" stroke="#777" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <line x1="360" y1="386" x2="360" y2="394" stroke="#222" stroke-width="2"/>
+  <line x1="86" y1="150" x2="94" y2="150" stroke="#222" stroke-width="2"/>
+  <text x="360" y="410" text-anchor="middle" font-size="14" fill="#222">ridge point&#160;&#160;C/β</text>
+  <text x="82" y="154" text-anchor="end" font-size="14" fill="#222">C</text>
+
+  <!-- roofline: slope β up to the ridge (360,150), then flat ceiling C -->
+  <polyline points="90,390 360,150 670,150" fill="none" stroke="#222" stroke-width="3" stroke-linejoin="round"/>
+  <text x="218" y="262" text-anchor="middle" font-size="14" fill="#222" transform="rotate(-41.63 218 262)">memory-bound, slope β</text>
+  <text x="505" y="138" text-anchor="middle" font-size="14" fill="#222">compute-bound, ceiling C</text>
+
+  <!-- B grows: operating point slides right -->
+  <line x1="150" y1="375" x2="340" y2="375" stroke="#c2410c" stroke-width="1.5" marker-end="url(#accentArrow)"/>
+  <text x="245" y="368" text-anchor="middle" font-size="14" fill="#c2410c">B grows →</text>
+
+  <!-- operating points -->
+  <circle cx="150" cy="336.67" r="6" fill="#c2410c"/>
+  <text x="163" y="341" font-size="14" fill="#c2410c">decode, small B</text>
+
+  <circle cx="360" cy="150" r="6" fill="#c2410c"/>
+  <text x="350" y="120" text-anchor="end" font-size="14" fill="#c2410c">decode, B = B*</text>
+  <text x="350" y="138" text-anchor="end" font-size="14" fill="#c2410c">(≈240 on TPU v5e, bf16)</text>
+
+  <circle cx="600" cy="150" r="6" fill="#c2410c"/>
+  <text x="600" y="178" text-anchor="middle" font-size="14" fill="#c2410c">prefill: B·S tokens</text>
+</svg>

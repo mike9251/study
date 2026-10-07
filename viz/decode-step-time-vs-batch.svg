@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="560" viewBox="0 0 760 560" font-family="sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#222"/>
+    </marker>
+  </defs>
+  <rect width="760" height="560" fill="#fafafa"/>
+
+  <text x="380" y="26" text-anchor="middle" font-size="18" fill="#222">Decode matmul [B,H]×[H,H′]: roofline bound vs batch size</text>
+
+  <!-- ===== Panel A: step time ===== -->
+  <g stroke="#222" stroke-width="1.5" fill="none">
+    <line x1="90" y1="250" x2="700" y2="250" marker-end="url(#arrow)"/>
+    <line x1="90" y1="250" x2="90" y2="50" marker-end="url(#arrow)"/>
+    <line x1="400" y1="250" x2="400" y2="256"/>
+  </g>
+  <text transform="translate(55 150) rotate(-90)" text-anchor="middle" font-size="14" fill="#222">step time t</text>
+
+  <!-- bounding terms (grey dashed) -->
+  <g stroke="#777" stroke-width="2" stroke-dasharray="7 5" fill="none">
+    <line x1="90" y1="170" x2="700" y2="170"/>
+    <line x1="90" y1="250" x2="700" y2="92.6"/>
+  </g>
+  <text x="98" y="160" font-size="14" fill="#777" xml:space="preserve">HBM term  s·H·H′/β  (no B)</text>
+  <text x="698" y="80" text-anchor="end" font-size="14" fill="#777" xml:space="preserve">compute term  2·B·H·H′/C</text>
+
+  <!-- critical batch B* -->
+  <line x1="400" y1="250" x2="400" y2="60" stroke="#222" stroke-width="1.2" stroke-dasharray="2 3"/>
+  <text x="400" y="272" text-anchor="middle" font-size="14" fill="#222">B* = s·C/(2β)</text>
+
+  <!-- actual bound (accent) -->
+  <polyline points="90,170 400,170 700,92.6" fill="none" stroke="#c2410c" stroke-width="4" stroke-linejoin="round"/>
+  <text x="532" y="155" font-size="14" fill="#c2410c">t = max(compute, HBM)</text>
+
+  <!-- region labels -->
+  <g font-size="13" fill="#444" text-anchor="middle">
+    <text x="315" y="224">memory-bound:</text>
+    <text x="315" y="240">extra tokens ≈ free</text>
+    <text x="560" y="224">compute-bound:</text>
+    <text x="560" y="240">+2·H·H′/C per token</text>
+  </g>
+
+  <!-- ===== Panel B: throughput ===== -->
+  <g stroke="#222" stroke-width="1.5" fill="none">
+    <line x1="90" y1="500" x2="700" y2="500" marker-end="url(#arrow)"/>
+    <line x1="90" y1="500" x2="90" y2="320" marker-end="url(#arrow)"/>
+    <line x1="400" y1="500" x2="400" y2="506"/>
+  </g>
+  <text x="395" y="538" text-anchor="middle" font-size="14" fill="#222">batch size B (tokens per step)</text>
+  <text transform="translate(55 410) rotate(-90)" text-anchor="middle" font-size="14" fill="#222">throughput B / t</text>
+
+  <!-- plateau height reference (grey dashed) -->
+  <line x1="90" y1="350" x2="400" y2="350" stroke="#777" stroke-width="2" stroke-dasharray="7 5" fill="none"/>
+
+  <!-- critical batch B* -->
+  <line x1="400" y1="500" x2="400" y2="330" stroke="#222" stroke-width="1.2" stroke-dasharray="2 3"/>
+  <text x="400" y="520" text-anchor="middle" font-size="14" fill="#222">B*</text>
+
+  <!-- actual throughput (accent) -->
+  <polyline points="90,500 400,350 700,350" fill="none" stroke="#c2410c" stroke-width="4" stroke-linejoin="round"/>
+  <text x="560" y="338" text-anchor="middle" font-size="14" fill="#c2410c" xml:space="preserve">plateau  C/(2·H·H′)</text>
+
+  <!-- region labels -->
+  <g font-size="13" fill="#444" text-anchor="middle">
+    <text x="285" y="472">linear:</text>
+    <text x="285" y="488">more tokens, same time</text>
+    <text x="560" y="472">saturated:</text>
+    <text x="560" y="488">hardware fully used</text>
+  </g>
+</svg>
